@@ -6,7 +6,7 @@
 #ADMIN_USID: int = "INSERT_USID_HERE"
 
 WORK_DIR: str = "tmp-workdir"
-WHITELIST_FILE: str = "whitelist"
+WHITELIST_FILE: str = "whitelist.txt"
 
 CREDENTIALS = {
     "youtube": {

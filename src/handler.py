@@ -49,7 +49,7 @@ def update_handler(update: Update, ctx: CallbackContext):
     """ Handler of /update command """
         
     try:
-        resp = check_output(['pip3', 'install', 'youtube-dl', '--upgrade'])
+        resp = check_output(['pip', 'install', 'youtube-dl', '--upgrade'])
         reply(update.message, resp.decode('utf-8'))
 
     except CalledProcessError as e:
