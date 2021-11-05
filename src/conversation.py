@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # Conversation stages
 STATE_ENTER_EXT, STATE_ENTER_LENGTH, STATE_CONFIRM = range(3)
 
-def keyboard(state: int):
+def keyboard(state: int) -> ReplyKeyboardMarkup:
     """ Return ReplyKeyboardMarkup for a specfic state """
 
     if state == STATE_ENTER_EXT:
@@ -31,6 +31,20 @@ def keyboard(state: int):
         resize_keyboard=True, 
         one_time_keyboard=True
     )
+
+def prompt_text(state: int) -> str:
+    """ Return prompt text for a specific state """
+
+    if state == STATE_ENTER_EXT:
+        text = 'choose: <b>video</b> or <b>audio</b>'
+    elif state == STATE_ENTER_LENGTH:
+        text = 'choose: <b>full</b> or <b>hh:mm:ss-hh:mm:ss</b>'
+    elif state == STATE_CONFIRM:
+        text = 'please confirm'
+    else:
+        raise ValueError(f"invalid state ({state})")
+
+    return text
 
 
 @require_whitelist
@@ -59,16 +73,14 @@ def conversation_entry(update: Update, ctx: CallbackContext):
         reply_error(update.message, f'{error}\n({type(e).__name__})')
         return ConversationHandler.END
 
-    reply(update.message, 
-        f'<strong>{info["title"]}</strong>\n<i>by {info["uploader"]}</i>')
-    reply(update.message, 
-        '<i>select video / audio</i>', 
-        keyboard=keyboard(STATE_ENTER_EXT))
-
     # keep track of data
     ctx.chat_data["url"] = url
     ctx.chat_data["info"] = info
-    
+
+    # display url info
+    reply(update.message, f'<strong>{info["title"]}</strong>\n<i>by {info["uploader"]}</i>')
+
+    reply(update.message, prompt_text(STATE_ENTER_EXT), keyboard=keyboard(STATE_ENTER_EXT))  
     return STATE_ENTER_EXT
 
 @require_whitelist
@@ -86,11 +98,16 @@ def conversation_enter_ext(update: Update, ctx: CallbackContext):
 
         return STATE_ENTER_EXT
 
-    reply(update.message, '<i>select start / end { HH:MM:SS-HH:MM:SS }</i>', keyboard=keyboard(STATE_ENTER_LENGTH))
-
     # keep track of data
     ctx.chat_data["ext"] = ext
 
+    # skip length selection if ext=video
+    if ext == 'video':
+        ctx.chat_data['length'] = 'full'
+        reply(update.message, prompt_text(STATE_CONFIRM), keyboard=keyboard(STATE_CONFIRM))
+        return STATE_CONFIRM
+
+    reply(update.message, prompt_text(STATE_ENTER_LENGTH), keyboard=keyboard(STATE_ENTER_LENGTH))
     return STATE_ENTER_LENGTH
 
 @require_whitelist
@@ -108,13 +125,10 @@ def conversation_enter_length(update: Update, ctx: CallbackContext):
 
         return STATE_ENTER_LENGTH
 
-    reply(update.message, 
-        '<i>please confirm</i>', 
-        keyboard=keyboard(STATE_CONFIRM))
-
     # keep track of data
     ctx.chat_data["length"] = length
 
+    reply(update.message, prompt_text(STATE_CONFIRM), keyboard=keyboard(STATE_CONFIRM))
     return STATE_CONFIRM
 
 @require_whitelist
