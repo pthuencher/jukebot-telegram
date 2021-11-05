@@ -149,8 +149,8 @@ def conversation_confirm(update: Update, ctx: CallbackContext):
                     chat_id=update.message.chat_id, 
                     video=fd, 
                     timeout=180,
-                    title=ctx.chat_data["info"]["title"],
-                    performer=ctx.chat_data["info"]["uploader"],
+                    caption=ctx.chat_data["info"]["title"],
+                    #performer=ctx.chat_data["info"]["uploader"],
                     duration=ctx.chat_data["info"]["duration"])
 
             elif ctx.chat_data['ext'] == 'audio':
@@ -173,8 +173,16 @@ def conversation_confirm(update: Update, ctx: CallbackContext):
         reply_error(update.message, f'{error}\n({type(e).__name__})')
 
     finally:
-        #cleanup
-        os.remove(filename)
+        cleanup(filename)
 
     return ConversationHandler.END
 
+
+def cleanup(filename: str):
+    part_filename = filename + ".part"
+
+    if os.path.isfile(filename):
+        os.remove(filename)
+
+    if os.path.isfile(part_filename):
+        os.remove(part_filename)
