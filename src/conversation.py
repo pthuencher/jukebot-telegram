@@ -40,7 +40,7 @@ def prompt_text(state: int) -> str:
     elif state == STATE_ENTER_LENGTH:
         text = 'Choose length: <b>full</b> / <b>hh:mm:ss-hh:mm:ss</b>'
     elif state == STATE_CONFIRM:
-        text = 'Please confirm to continue'
+        text = 'Confirm ...'
     else:
         raise ValueError(f"invalid state ({state})")
 
@@ -51,9 +51,7 @@ def prompt_text(state: int) -> str:
 def handle_abort(update: Update, ctx: CallbackContext):
     """ Abort (cancle) the converstation """
 
-    reply(update.message, 
-        '<i>aborted</i>')
-
+    reply(update.message, 'aborted')
     return ConversationHandler.END
 
 @require_whitelist
@@ -140,10 +138,14 @@ def conversation_confirm(update: Update, ctx: CallbackContext):
 
     try:
 
+        reply(update.message, "Download started. Please wait ...")
+
         # 1.) download file
         logger.info(f"start download of {ctx.chat_data['url']} for {update.message.from_user.id}")
         ctx.bot.send_chat_action(update.message.chat_id, action=ChatAction.RECORD_AUDIO)
         filename = youtube_dl_download(ctx.chat_data['url'], ctx.chat_data['ext'])
+
+        reply(update.message, "Download finished. Sending ...")
 
         # 2.) cut file
         if ctx.chat_data['length'] != 'full':
