@@ -11,9 +11,9 @@ except ImportError:
     exit(-1)
 
 try:
-    from config import ADMIN_USID
+    from config import ADMIN_UID
 except ImportError:
-    ADMIN_USID = None
+    ADMIN_UID = None
 
 class TEST_BOT():
 

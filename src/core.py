@@ -33,6 +33,9 @@ def register_handlers(dispatcher: Dispatcher) -> bool:
     dispatcher.add_handler(CommandHandler("grant", grant_handler))
     dispatcher.add_handler(CommandHandler("revoke", revoke_handler))
 
+    # request access handler
+    dispatcher.add_handler(CommandHandler("request_access", request_access_handler))
+
     # converstation handler
     dispatcher.add_handler(ConversationHandler(
         entry_points=[MessageHandler(Filters.all, conversation_entry, pass_chat_data=True)],

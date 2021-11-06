@@ -3,7 +3,7 @@
 # Set BOT_TOKEN and rename this file to "config.py"
 
 #BOT_TOKEN: str = "INSERT_YOUR_BOT_TOKEN_HERE" 
-ADMIN_USID: int = 0
+ADMIN_UID: int = 0
 
 WORK_DIR: str = "tmp-workdir"
 

@@ -6,10 +6,7 @@ from telegram.ext import *
 from src.utils import reply, reply_error
 from src.auth import require_whitelist, require_admin, load_whitelist, save_whitelist
 
-try:
-    from config import WHITELIST_FILE
-except ImportError:
-    WHITELIST_FILE = "whitelist.txt"
+from config import WHITELIST_FILE, ADMIN_UID
 
 
 
@@ -60,35 +57,47 @@ def grant_handler(update: Update, ctx: CallbackContext):
     """ Handler of /grant command """
 
     try:
-        usid = update.message.text.split(" ")[1]
-        usid = int(usid)
+        uid = update.message.text.split(" ")[1]
+        uid = int(uid)
     except (IndexError, ValueError):
         reply_error(update.message, 
-            "invalid input.\n<i>Usage: /grant usid</i>")
+            "invalid input.\n<i>Usage: /grant uid</i>")
         return
 
     # update whitelist.txt
     whitelist = load_whitelist(WHITELIST_FILE)
-    whitelist.append(usid)
+    whitelist.append(uid)
     save_whitelist(WHITELIST_FILE, whitelist)
 
-    reply(update.message, f"added '{usid}' to the whitelist.")
+    reply(update.message, f"added '{uid}' to the whitelist.")
 
 @require_admin
 def revoke_handler(update: Update, ctx: CallbackContext):
     """ Handler of /revoke command """
 
     try:
-        usid = update.message.text.split(" ")[1]
-        usid = int(usid)
+        uid = update.message.text.split(" ")[1]
+        uid = int(uid)
     except (IndexError, ValueError):
         reply_error(update.message, 
-            "invalid input.\n<i>Usage: /revoke usid</i>")
+            "invalid input.\n<i>Usage: /revoke uid</i>")
         return
 
     # update whitelist.txt
     whitelist = load_whitelist(WHITELIST_FILE)
-    whitelist.remove(usid)
+    whitelist.remove(uid)
     save_whitelist(WHITELIST_FILE, whitelist)
 
-    reply(update.message, f"removed '{usid}' from the whitelist.")
+    reply(update.message, f"removed '{uid}' from the whitelist.")
+
+
+def request_access_handler(update: Update, ctx: CallbackContext):
+    """ Handler of /request_access command """
+    
+    user: User = update.message.from_user
+    # send message to requesting user
+    ctx.bot.send_message(chat_id=user.id, text='Access request send.')
+    # send message to admin
+    ctx.bot.send_message(chat_id=ADMIN_UID, 
+        text=f'<b>Access Request</b> by {user.username} ({user.first_name} {user.last_name}). Use /grant {user.id} to grant access.',
+        parse_mode=ParseMode.HTML)

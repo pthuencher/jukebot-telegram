@@ -4,19 +4,19 @@ from telegram import *
 from telegram.ext import *
 
 from src.utils import reply, reply_error
-from config import WHITELIST_FILE, ADMIN_USID
+from config import WHITELIST_FILE, ADMIN_UID
 
 
 
 def require_admin(f) -> callable:
-    """ Permit callback execution only if requests originate from admin usid """
+    """ Permit callback execution only if requests originate from admin uid """
 
     @wraps(f)
     def decorated(update: Update, ctx: CallbackContext):
         
-        usid = update.message.from_user.id
+        uid = update.message.from_user.id
 
-        if is_admin(usid):
+        if is_admin(uid):
             return f(update, ctx)
 
         reply_error(update.message, "not authorized.")
@@ -25,42 +25,42 @@ def require_admin(f) -> callable:
     return decorated
 
 def require_whitelist(f) -> callable:
-    """ Permit callback execution only if requests originate from whitelisted usid """
+    """ Permit callback execution only if requests originate from whitelisted uid """
 
     @wraps(f)
     def decorated(update: Update, ctx: CallbackContext):
-        
-        usid = update.message.from_user.id
 
-        if is_whitelisted(usid):
+        uid = update.message.from_user.id
+
+        if is_whitelisted(uid):
             return f(update, ctx)
 
-        reply_error(update.message, "not authorized.")
+        reply_error(update.message, "not authorized. /request_access")
         
 
     return decorated
 
 
-def is_admin(usid: int) -> bool:
-    """ Determine if usid is admin """
+def is_admin(uid: int) -> bool:
+    """ Determine if uid is admin """
 
     # always permit access for admin
-    if ADMIN_USID and usid == ADMIN_USID:
+    if ADMIN_UID and uid == ADMIN_UID:
         return True
     
     # deny access otherwise..
     return False
 
-def is_whitelisted(usid: int) -> bool:
-    """ Determine if usid is whitelisted """
+def is_whitelisted(uid: int) -> bool:
+    """ Determine if uid is whitelisted """
 
     # always permit access for admin
-    if is_admin(usid):
+    if is_admin(uid):
         return True
 
-    # check if usid is whitelisted
+    # check if uid is whitelisted
     whitelist = load_whitelist(WHITELIST_FILE)
-    if usid in whitelist:
+    if uid in whitelist:
         return True
     
     # deny access otherwise..
@@ -69,13 +69,13 @@ def is_whitelisted(usid: int) -> bool:
 
 
 def load_whitelist(filename: str) -> list:
-    """ Load usids from whitelist.txt into list """
+    """ Load uids from whitelist.txt into list """
 
     with open(filename, "r") as whitelist:
         return list(map(lambda x: int(x.strip()), whitelist.readlines()))
 
 def save_whitelist(filename:str, new: list) -> bool:
-    """ Save usid list into whitelist.txt """
+    """ Save uid list into whitelist.txt """
 
     with open(filename, "w") as whitelist:
         new = list(map(lambda x: str(x), new))
