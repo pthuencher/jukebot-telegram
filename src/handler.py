@@ -22,8 +22,8 @@ def start_handler(update: Update, ctx: CallbackContext):
     
     reply(update.message, """ 
 <strong>JukeBot</strong>
-<i>v2021.11.04</i>
-https://github.com/pthuencher/python-telegram-bot-audio-downloader
+<i>v2021.11.06</i>
+https://github.com/pthuencher/jukebot-telegram
 
 <strong>Share a link or enter a URL to download audio file.</strong>
 Use /update to fetch most recent youtube-dl /version.
