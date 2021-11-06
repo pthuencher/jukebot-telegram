@@ -8,4 +8,4 @@ ADMIN_UID: int = 0
 WORK_DIR: str = "tmp-workdir"
 
 WHITELIST_FILE: str = "whitelist.txt"
-YOUTUBE_COOKIE_FILE = 'cookies.txt'
+YOUTUBE_COOKIE_FILE: str = 'cookies.txt'

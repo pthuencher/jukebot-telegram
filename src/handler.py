@@ -10,7 +10,6 @@ from config import WHITELIST_FILE, ADMIN_UID
 
 
 
-@require_whitelist
 def error_handler(update: Update, ctx: CallbackContext):
     """ Error handler """
 
