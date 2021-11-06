@@ -2,6 +2,7 @@
 config.py
 whitelist.txt
 tmp-workdir/
+cookies.txt
 
 
 # Byte-compiled / optimized / DLL files

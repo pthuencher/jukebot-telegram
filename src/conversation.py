@@ -36,11 +36,11 @@ def prompt_text(state: int) -> str:
     """ Return prompt text for a specific state """
 
     if state == STATE_ENTER_EXT:
-        text = 'choose: <b>video</b> or <b>audio</b>'
+        text = 'Choose format: <b>video</b> / <b>audio</b>'
     elif state == STATE_ENTER_LENGTH:
-        text = 'choose: <b>full</b> or <b>hh:mm:ss-hh:mm:ss</b>'
+        text = 'Choose length: <b>full</b> / <b>hh:mm:ss-hh:mm:ss</b>'
     elif state == STATE_CONFIRM:
-        text = 'please confirm'
+        text = 'Please confirm to continue'
     else:
         raise ValueError(f"invalid state ({state})")
 

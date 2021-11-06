@@ -4,16 +4,7 @@ from telegram import *
 from telegram.ext import *
 
 from src.utils import reply, reply_error
-
-try:
-    from config import ADMIN_USID
-except ImportError:
-    ADMIN_USID = None
-
-try:
-    from config import WHITELIST_FILE
-except ImportError:
-    WHITELIST_FILE = "whitelist.txt"
+from config import WHITELIST_FILE, ADMIN_USID
 
 
 

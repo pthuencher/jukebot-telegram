@@ -9,12 +9,11 @@ from telegram.ext import *
 import youtube_dl
 from pydub import AudioSegment
 
-from config import WORK_DIR, CREDENTIALS
+from config import WORK_DIR, YOUTUBE_COOKIE_FILE
 
 YTDL_COMMON_OPTS = {
     'logger': logging.getLogger('youtube-dl'),
-    'username': CREDENTIALS['youtube']['username'],
-    'password': CREDENTIALS['youtube']['password'],
+    'cookiefile': YOUTUBE_COOKIE_FILE
 }
 
 
