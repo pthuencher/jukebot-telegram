@@ -16,7 +16,7 @@ except ImportError:
     sys.exit(-1)
 
 def parse_arguments() -> dict:
-    parser = ArgumentParser(description="youtube-dl telegram bot interface")
+    parser = ArgumentParser(description="yt-dlp telegram bot interface")
 
     parser.add_argument("-d", "--debug", 
         help="set log-level to DEBUG", 

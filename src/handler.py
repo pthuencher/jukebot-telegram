@@ -26,7 +26,7 @@ def start_handler(update: Update, ctx: CallbackContext):
 https://github.com/pthuencher/jukebot-telegram
 
 <strong>Share a link or enter a URL to download audio file.</strong>
-Use /update to fetch most recent youtube-dl /version.
+Use /update to fetch most recent yt-dlp /version.
     """)
     
 @require_whitelist
@@ -34,22 +34,22 @@ def version_handler(update: Update, ctx: CallbackContext):
     """ Handler of /version command """
       
     try:
-        resp = check_output(['youtube-dl', '--version'])
-        reply(update.message, '<strong>youtube-dl:</strong> %s' % resp.decode('utf-8'))
+        resp = check_output(['yt-dlp', '--version'])
+        reply(update.message, '<strong>yt-dlp:</strong> %s' % resp.decode('utf-8'))
 
     except CalledProcessError as e:
-        reply_error(update.message, 'failed to determine version of youtube-dl\n%r' % e)
+        reply_error(update.message, 'failed to determine version of yt-dlp\n%r' % e)
 
 @require_admin
 def update_handler(update: Update, ctx: CallbackContext):
     """ Handler of /update command """
         
     try:
-        resp = check_output(['pip', 'install', 'youtube-dl', '--upgrade'])
+        resp = check_output(['pip', 'install', 'yt-dlp', '--upgrade'])
         reply(update.message, resp.decode('utf-8'))
 
     except CalledProcessError as e:
-        reply_error(update.message, 'failed to update youtube-dl\n%r' % e)
+        reply_error(update.message, 'failed to update yt-dlp\n%r' % e)
 
 @require_admin
 def grant_handler(update: Update, ctx: CallbackContext):

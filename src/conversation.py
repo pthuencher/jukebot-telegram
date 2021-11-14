@@ -3,7 +3,7 @@ import os
 
 from telegram import *
 from telegram.ext import *
-import youtube_dl
+from yt_dlp.utils import DownloadError, ExtractorError
 
 from src.utils import reply, reply_error, youtube_dl_info, youtube_dl_download, pydub_cut, sanitize_url, validate_ext, validate_length, ansi_escape
 from src.auth import require_whitelist
@@ -62,7 +62,7 @@ def conversation_entry(update: Update, ctx: CallbackContext):
 
     try:
         info = youtube_dl_info(url)
-    except (youtube_dl.utils.DownloadError, youtube_dl.utils.ExtractorError) as e:
+    except (DownloadError, ExtractorError) as e:
         # remove ansi colors
         error = ansi_escape.sub('', str(e))
         # remove ERROR: prefix

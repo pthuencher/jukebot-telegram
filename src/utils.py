@@ -6,13 +6,13 @@ from glob import glob
 
 from telegram import *
 from telegram.ext import *
-import youtube_dl
+from yt_dlp import YoutubeDL
 from pydub import AudioSegment
 
 from config import WORK_DIR, YOUTUBE_COOKIE_FILE
 
 YTDL_COMMON_OPTS = {
-    'logger': logging.getLogger('youtube-dl'),
+    'logger': logging.getLogger('yt-dlp'),
     'cookiefile': YOUTUBE_COOKIE_FILE
 }
 
@@ -75,8 +75,8 @@ def youtube_dl_info(url: str) -> dict:
     }
 
     # load audio information
-    with youtube_dl.YoutubeDL(opts) as ydl:
-        logger.debug('using youtube-dl opts: %r' % opts)
+    with YoutubeDL(opts) as ydl:
+        logger.debug('using yt-dlp opts: %r' % opts)
         info = ydl.extract_info(url, download=False)
 
     return info
@@ -100,11 +100,11 @@ def youtube_dl_download(url: str, ext: str, progress_cb: callable = None) -> str
     }
 
     # load audio information
-    with youtube_dl.YoutubeDL(opts) as ydl:
-        logger.debug('using youtube-dl opts: %r' % opts)
+    with YoutubeDL(opts) as ydl:
+        logger.debug('using yt-dlp opts: %r' % opts)
         ydl.download([url])
 
-    filename = glob(filename + '*') # workaround for unexpected extensions amend by youtube-dl
+    filename = glob(filename + '*') # workaround for unexpected extensions amend by yt-dlp
     return filename[0]
 
 def pydub_cut(filename: str, length: str) -> int:

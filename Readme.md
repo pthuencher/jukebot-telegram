@@ -2,7 +2,7 @@
 
 # JukeBot Telegram
 
-This Telegram Bot uses [youtube-dl](https://youtube-dl.org/) to download audio and video files from YouTube and several other platforms allowing them to be played offline with the telegram music player.
+This Telegram Bot uses [yt-dlp](https://github.com/yt-dlp/yt-dlp) to download audio and video files from YouTube and several other platforms allowing them to be played offline with the telegram music player.
 
 ### Setup
 
