@@ -1,6 +1,5 @@
 python-telegram-bot==13.7
 yt-dlp==2021.11.10.1
 pydub==0.25.1
-ffprobe==0.5
 pytest==6.2.5
 

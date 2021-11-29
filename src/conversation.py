@@ -138,25 +138,33 @@ def conversation_confirm(update: Update, ctx: CallbackContext):
 
     try:
 
-        reply(update.message, "Download started. Please wait ...")
+        reply(update.message, "Download started...")
 
         # 1.) download file
         logger.info(f"start download of {ctx.chat_data['url']} for {update.message.from_user.id}")
         ctx.bot.send_chat_action(update.message.chat_id, action=ChatAction.RECORD_AUDIO)
         filename = youtube_dl_download(ctx.chat_data['url'], ctx.chat_data['ext'])
 
-        reply(update.message, "Download finished. Sending ...")
+        reply(update.message, "Download finished...")
 
         # 2.) cut file
         if ctx.chat_data['length'] != 'full':
+
+            reply(update.message, "Cut started...")
+
             logger.debug(f"cut file to {ctx.chat_data['length']}")
             new_duration = pydub_cut(filename, ctx.chat_data['length'])
             # update duration
             ctx.chat_data["info"]["duration"] = new_duration
 
+            reply(update.message, "Cut finished...")
+
         # 3.) send file
         logger.debug(f"start transferring file")
+
+        reply(update.message, "Transfer started...")
         ctx.bot.send_chat_action(update.message.chat_id, action=ChatAction.UPLOAD_AUDIO)
+
         with open(filename, 'rb') as fd:
             logger.debug('start transfer of file %s to client' % filename)
             
