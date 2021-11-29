@@ -180,7 +180,7 @@ def conversation_confirm(update: Update, ctx: CallbackContext):
 
             logger.info(f"transfer of {filename} for {update.message.from_user.id} finished")
 
-    except youtube_dl.utils.DownloadError as e:
+    except DownloadError as e:
         # remove ansi colors
         error = ansi_escape.sub('', str(e))
         # remove ERROR: prefix
