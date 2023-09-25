@@ -1,5 +1,5 @@
 python-telegram-bot==13.7
-yt-dlp==2023.7.6
+yt-dlp==2023.9.24
 pydub==0.25.1
 pytest==6.2.5
 
